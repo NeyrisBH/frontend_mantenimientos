@@ -1,12 +1,14 @@
 <template>
   <HeaderComponent />
   <SidebarComponent />
-  <RouterView />
+  <section class="main-container">
+    <RouterView />
+  </section>
 </template>
 
 <script>
-import HeaderComponent from '@/components/Header/HeaderComponent.vue';
-import SidebarComponent from '@/components/Sidebar/SidebarComponent.vue';
+import HeaderComponent from './components/Header/HeaderComponent.vue';
+import SidebarComponent from './components/Sidebar/SidebarComponent.vue';
 
 export default {
   name: 'App',
@@ -18,11 +20,21 @@ export default {
 </script>
 
 <style>
-  #app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
-  }
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+}
+
+.main-container {
+  margin-left: 250px;
+  transition: margin-left 0.5s;
+}
+
+body.sidebar-collapse .main-container {
+  margin-left: 0;
+  width: 100%;
+}
 </style>

@@ -28,13 +28,5 @@ export default {
 </script>
 
 <style scoped>
-.main-container {
-    margin-left: 250px;
-    transition: margin-left 0.5s;
-}
 
-body.sidebar-collapse .main-container {
-    margin-left: 0;
-    width: 100%;
-}
 </style>
