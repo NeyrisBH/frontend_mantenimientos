@@ -1,10 +1,8 @@
 <template>
-    <section class="main-container">
-        <div class="card-body">
-            <ChartContent />
-        </div>
-        <CardsContent />
-    </section>
+    <div class="card-body">
+        <ChartContent />
+    </div>
+    <CardsContent />f
 </template>
 
 <script>
@@ -27,6 +25,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
