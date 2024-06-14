@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <table id="tecnicos" class="display nowrap" style="width:100%">
+        <table id="example" class="display nowrap" style="width:100%">
             <thead>
                 <tr>
                     <th>Identificacion</th>
@@ -21,7 +21,7 @@
                     <td>2011-04-25</td>
                     <td>$320,800</td>
                     <td>
-                        <button class="btn btn-info btn-sm me-2" @click="verRegistro('Tiger Nixon')">
+                        <button type="button" class="btn btn-info btn-sm me-2" @click="verRegistro('Tiger Nixon')">
                             <i class="fas fa-eye"></i>
                         </button>
                         <button class="btn btn-warning btn-sm me-2" @click="editarRegistro('Tiger Nixon')">
@@ -52,9 +52,9 @@
 
 export default {
     mounted() {
-        window.jQuery('#tecnicos').DataTable({
+        window.jQuery('#example').DataTable({
             responsive: true,
-            scrollY: "300px",
+            scrollY: "600px",
             scrollCollapse: true,
             paging: true,
             language: {
@@ -85,7 +85,8 @@ export default {
 
 <style scoped>
 .container {
-    width: 100%;
+    width: 120%;
     overflow-x: auto;
+    white-space: nowrap;
 }
 </style>

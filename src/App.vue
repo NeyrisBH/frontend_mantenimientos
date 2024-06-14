@@ -1,20 +1,13 @@
 <template>
-  <HeaderComponent />
-  <SidebarComponent />
-  <section class="main-container">
-    <RouterView />
-  </section>
+  <RouterView />
 </template>
 
 <script>
-import HeaderComponent from './components/Header/HeaderComponent.vue';
-import SidebarComponent from './components/Sidebar/SidebarComponent.vue';
 
 export default {
   name: 'App',
   components: {
-    HeaderComponent,
-    SidebarComponent
+
   }
 }
 </script>

@@ -1,8 +1,11 @@
+
 import FallasPage from '@/pages/FallasPage.vue';
 import HomePage from '@/pages/HomePage.vue';
+import NotFound404 from '@/pages/NotFound404.vue';
 import TecnicosPage from '@/pages/TecnicosPage.vue';
 import UsuariosPage from '@/pages/UsuariosPage.vue';
 import { createRouter, createWebHistory } from 'vue-router';
+import DashboardPage from './pages/DashboardPage.vue';
 import EquiposPage from './pages/EquiposPage.vue';
 import LoginPage from './pages/LoginPage.vue';
 import OTCorrectivaPage from './pages/OTCorrectivaPage.vue';
@@ -15,12 +18,26 @@ import UbicacionesPage from './pages/UbicacionesPage.vue';
 
 const routers = [
     {
+        path: '/',
+        redirect: '/login'
+    },
+    {
+        path: '/not-found',
+        name: 'NotFound',
+        component: NotFound404
+    },
+    {
         path: '/home',
         name: 'HomePage',
         component: HomePage
     },
     {
-        path: '/',
+        path: '/dashboard',
+        name: 'DashboardPage',
+        component: DashboardPage
+    },
+    {
+        path: '/login',
         name: "LoginPage",
         component: LoginPage
     },
