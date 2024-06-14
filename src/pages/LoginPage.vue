@@ -100,7 +100,7 @@ export default {
                     contraseña: 'Pru3b4C0ntr4s3ñ4'
                 })
             };
-            fetch(base_url + 'token', opciones)
+            fetch(this.base_url + 'token', opciones)
                 .then(async (response) => {
                     if (!response.ok) {
                         console.log('Error en el token');
@@ -111,13 +111,13 @@ export default {
                         const data = await response.json();
                         this.token = data.token;
                         localStorage.setItem('token', this.token);
-                        this.$router.push('/home');
+                        this.$router.push('/dashboard');
                     }
                 })
         }
     },
     mounted() {
-        solicitarToken();
+        this.solicitarToken();
     },
 }
 </script>

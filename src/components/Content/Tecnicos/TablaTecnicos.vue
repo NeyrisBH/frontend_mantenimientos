@@ -13,7 +13,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="tecnico in tecnicos">
+                <tr v-for="(tecnico, index) in tecnicos" :key="index">
                     <td>{{ tecnico.identificacion }}</td>
                     <td>{{ tecnico.rol }}</td>
                     <td>{{ tecnico.nombres }}</td>
@@ -21,13 +21,13 @@
                     <td>{{ tecnico.telefono }}</td>
                     <td>{{ tecnico.email }}</td>
                     <td>
-                        <button class="btn btn-info btn-sm me-2" @click="verRegistro('Tiger Nixon')">
+                        <button class="btn btn-info btn-sm me-2" @click="verRegistro(tecnico)">
                             <i class="fas fa-eye"></i>
                         </button>
-                        <button class="btn btn-warning btn-sm me-2" @click="editarRegistro('Tiger Nixon')">
+                        <button class="btn btn-warning btn-sm me-2" @click="editarRegistro(tecnico)">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <button class="btn btn-danger btn-sm me-2" @click="eliminarRegistro('Tiger Nixon')">
+                        <button class="btn btn-danger btn-sm me-2" @click="eliminarRegistro(tecnico)">
                             <i class="fas fa-trash"></i>
                         </button>
                     </td>
@@ -49,7 +49,6 @@
 </template>
 
 <script>
-
 export default {
     data() {
         return {
@@ -68,7 +67,7 @@ export default {
     },
     methods: {
         async consultaTecnicos() {
-            const authorization = "Bearer" + this.token;
+            const authorization = "Bearer " + this.token;
             const opciones = {
                 method: "GET",
                 headers: {
@@ -77,17 +76,27 @@ export default {
                     "Authorization": authorization,
                 }
             };
-            fetch(base_url + 'v1/tecnicos', opciones)
-                .then(async (response) => {
-                    if (!response.ok) {
-                        const error = new Error(response.statusText);
-                        error.json = response.json();
-                        console.log(error.menssage);
-                        throw error;
-                    } else {
-                        this.tecnicos = await response.json();
-                    }
-                })
+            try {
+                const response = await fetch(this.base_url + 'v1/tecnicos', opciones);
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error("Error response text:", errorText);
+                    throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
+                }
+                const data = await response.json();
+                this.tecnicos = data;
+            } catch (error) {
+                console.error("Error fetching técnicos:", error);
+            }
+        },
+        verRegistro(tecnico) {
+            console.log("Ver registro:", tecnico);
+        },
+        editarRegistro(tecnico) {
+            console.log("Editar registro:", tecnico);
+        },
+        eliminarRegistro(tecnico) {
+            console.log("Eliminar registro:", tecnico);
         }
     },
     beforeMount() {
@@ -118,10 +127,8 @@ export default {
                 }
             }
         });
-
     },
     components: {
-
     },
 }
 </script>
