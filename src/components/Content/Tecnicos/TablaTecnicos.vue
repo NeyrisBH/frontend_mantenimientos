@@ -13,13 +13,13 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>Tiger Nixon</td>
-                    <td>System Architect</td>
-                    <td>Edinburgh</td>
-                    <td>61</td>
-                    <td>2011-04-25</td>
-                    <td>$320,800</td>
+                <tr v-for="tecnico in tecnicos">
+                    <td>{{ tecnico.identificacion }}</td>
+                    <td>{{ tecnico.rol }}</td>
+                    <td>{{ tecnico.nombres }}</td>
+                    <td>{{ tecnico.apellidos }}</td>
+                    <td>{{ tecnico.telefono }}</td>
+                    <td>{{ tecnico.email }}</td>
                     <td>
                         <button class="btn btn-info btn-sm me-2" @click="verRegistro('Tiger Nixon')">
                             <i class="fas fa-eye"></i>
@@ -51,6 +51,48 @@
 <script>
 
 export default {
+    data() {
+        return {
+            tecnicos: [],
+            identificacion: null,
+            rol: '',
+            nombres: '',
+            apellidos: '',
+            telefono: null,
+            email: '',
+            horas: null,
+            contraseña: '',
+            token: localStorage.getItem('token'),
+            base_url: 'http://localhost:8080/api/',
+        }
+    },
+    methods: {
+        async consultaTecnicos() {
+            const authorization = "Bearer" + this.token;
+            const opciones = {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Cache-Control": "no-cache",
+                    "Authorization": authorization,
+                }
+            };
+            fetch(base_url + 'v1/tecnicos', opciones)
+                .then(async (response) => {
+                    if (!response.ok) {
+                        const error = new Error(response.statusText);
+                        error.json = response.json();
+                        console.log(error.menssage);
+                        throw error;
+                    } else {
+                        this.tecnicos = await response.json();
+                    }
+                })
+        }
+    },
+    beforeMount() {
+        this.consultaTecnicos();
+    },
     mounted() {
         window.jQuery('#tecnicos').DataTable({
             responsive: true,
@@ -76,6 +118,7 @@ export default {
                 }
             }
         });
+
     },
     components: {
 

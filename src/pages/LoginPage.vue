@@ -74,3 +74,50 @@
         </div>
     </div>
 </template>
+
+<script>
+export default {
+    data() {
+        return {
+            email: '',
+            contraseña: '',
+            token: localStorage.getItem('token'),
+            base_url: 'http://localhost:8080/api/'
+        }
+    },
+    methods: {
+        solicitarToken() {
+            const opciones = {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Cache-Control": "no-cache",
+                },
+                body: JSON.stringify({
+                    // email: this.email,
+                    // contraseña: this.contraseña
+                    email: 'ejemplo@gmail.com',
+                    contraseña: 'Pru3b4C0ntr4s3ñ4'
+                })
+            };
+            fetch(base_url + 'token', opciones)
+                .then(async (response) => {
+                    if (!response.ok) {
+                        console.log('Error en el token');
+                        const error = new Error(response.statusText);
+                        error.json = response.json();
+                        throw error;
+                    } else {
+                        const data = await response.json();
+                        this.token = data.token;
+                        localStorage.setItem('token', this.token);
+                        this.$router.push('/home');
+                    }
+                })
+        }
+    },
+    mounted() {
+        solicitarToken();
+    },
+}
+</script>

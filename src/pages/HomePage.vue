@@ -1,5 +1,5 @@
 <template>
-    <HeaderComponent  />
+    <HeaderComponent />
     <SidebarComponent />
     <section class="main-container">
         <RouterView />
@@ -7,13 +7,14 @@
 </template>
 
 <script>
-import HeaderComponent from './components/Header/HeaderComponent.vue';
-import SidebarComponent from './components/Sidebar/SidebarComponent.vue';
+import HeaderComponent from '@/components/Header/HeaderComponent.vue';
+import SidebarComponent from '@/components/Sidebar/SidebarComponent.vue';
+
 
 export default {
-    components: {
-        HeaderComponent,
-        SidebarComponent
-    }
+  components: {
+    HeaderComponent,
+    SidebarComponent
+  }
 }
 </script>
