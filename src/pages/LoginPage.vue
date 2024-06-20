@@ -4,32 +4,16 @@
             <div class="col-12 col-md-4 mt-5">
                 <div class="login-box shadow">
                     <div class="login-logo">
-                        <a href="{{ url('/biblioteca')}}"><b>Biblioteca</b></a>
+                        <h2>AdminCCC</h2>
                     </div>
-                    <!-- /.login-logo -->
                     <div class="card">
                         <div class="card-body login-card-body">
                             <p class="login-box-msg">Accede para comenzar</p>
-                            <!-- <div class="alert alert-info alert-dismissible fade show" role="alert">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                    <span class="sr-only">Close</span>
-                                </button>
-                            </div> -->
-                            <!-- Validación -->
-                            <!-- <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                    <strong>Autenticación</strong>
-                                    <ul>
-                                        <li>Error</li>
-                                    </ul>
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div> -->
-                            <!-- -- Formulario -- -->
-                            <form action="{{ url('/login') }}" method="post" novalidate>
+
+                            <!-- Formulario -->
+                            <form @submit.prevent="solicitarToken" class="form">
                                 <div class="input-group mb-3">
-                                    <input type="email" name="email" id="email" class="form-control"
+                                    <input type="email" v-model="email" id="email" class="form-control"
                                         placeholder="usuario o correo electrónico">
                                     <div class="input-group-append">
                                         <div class="input-group-text">
@@ -38,13 +22,19 @@
                                     </div>
                                 </div>
                                 <div class="input-group mb-3">
-                                    <input type="password" name="password" id="email" class="form-control"
+                                    <input type="password" v-model="contraseña" id="contraseña" class="form-control"
                                         placeholder="contraseña">
                                     <div class="input-group-append">
                                         <div class="input-group-text">
                                             <span class="fas fa-lock"></span>
                                         </div>
                                     </div>
+                                </div>
+                                <!-- Mensaje de error -->
+                                <div v-if="errores.length" class="alert alert-danger">
+                                    <ul>
+                                        <li v-for="error in errores" :key="error">{{ error }}</li>
+                                    </ul>
                                 </div>
                                 <div class="row">
                                     <div class="col-8">
@@ -53,21 +43,25 @@
                                             <label for="remember" class="mx-1"> Recordarme</label>
                                         </div>
                                     </div>
-                                    <!-- /.col -->
                                     <div class="col-4">
-                                        <button type="submit" class="btn btn-primary btn-block">Acceder</button>
+                                        <button :disabled="loading" type="submit"
+                                            class="btn btn-primary btn-block form-submit">
+                                            <span v-if="loading" class="spinner-border spinner-border-sm" role="status"
+                                                aria-hidden="true"></span>
+                                            {{ loading ? 'Cargando...' : 'Acceder' }}
+                                        </button>
                                     </div>
-                                    <!-- /.col -->
                                 </div>
                             </form>
+
+                            <!-- Links adicionales -->
                             <p class="mb-1">
-                                <a href="{{ url('/forgot-password') }}">Olvide mi contraseña</a>
+                                <router-link to="/forgot-password">Olvidé mi contraseña</router-link>
                             </p>
                             <p class="mb-0">
-                                <a href="{{ url('/register') }}" class="text-center">Registrar un nuevo usuario</a>
+                                <router-link to="/register" class="text-center">Registrar un nuevo usuario</router-link>
                             </p>
                         </div>
-                        <!-- /.login-card-body -->
                     </div>
                 </div>
             </div>
@@ -76,17 +70,37 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 export default {
     data() {
         return {
             email: '',
             contraseña: '',
-            token: localStorage.getItem('token'),
-            base_url: 'http://localhost:8080/api/'
+            base_url: 'http://localhost:8080/api/',
+            errores: [],
+            loading: false
         }
     },
     methods: {
-        solicitarToken() {
+        ...mapActions(['login']),
+        async solicitarToken() {
+            this.errores = [];
+            this.loading = true;
+
+            // Validar campos
+            if (!this.email.trim()) {
+                this.errores.push('El email es requerido.');
+            }
+            if (!this.contraseña.trim()) {
+                this.errores.push('La contraseña es requerida.');
+            }
+
+            if (this.errores.length > 0) {
+                this.loading = false;
+                return;
+            }
+
             const opciones = {
                 method: "POST",
                 headers: {
@@ -94,30 +108,35 @@ export default {
                     "Cache-Control": "no-cache",
                 },
                 body: JSON.stringify({
-                    // email: this.email,
-                    // contraseña: this.contraseña
-                    email: 'ejemplo@gmail.com',
-                    contraseña: 'Pru3b4C0ntr4s3ñ4'
+                    email: this.email,
+                    contraseña: this.contraseña
                 })
             };
-            fetch(this.base_url + 'token', opciones)
-                .then(async (response) => {
-                    if (!response.ok) {
-                        console.log('Error en el token');
-                        const error = new Error(response.statusText);
-                        error.json = response.json();
-                        throw error;
-                    } else {
-                        const data = await response.json();
-                        this.token = data.token;
-                        localStorage.setItem('token', this.token);
-                        this.$router.push('/dashboard');
-                    }
-                })
+
+            try {
+                const response = await fetch(this.base_url + 'token', opciones);
+                if (!response.ok) {
+                    console.log(response.statusText)
+                    throw new Error('Error en la solicitud del token: ' + response.statusText);
+                }
+                const data = await response.json();
+                await this.login(data.token);
+                this.$router.push('/home/dashboard');
+                console.log('Token recibido:', data.token);
+
+                setTimeout(() => {
+                    this.$store.dispatch('logout');
+                    this.$router.push('/login');
+                }, 2700000);
+
+
+            } catch (error) {
+                console.error('Hubo un problema con la solicitud del token:', error);
+                this.errores.push('Hubo un problema con la solicitud del token.');
+            } finally {
+                this.loading = false;
+            }
         }
-    },
-    mounted() {
-        this.solicitarToken();
-    },
+    }
 }
 </script>

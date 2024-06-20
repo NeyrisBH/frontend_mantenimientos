@@ -11,6 +11,7 @@ import 'datatables.net-responsive-dt/css/responsive.dataTables.css';
 import { createApp } from 'vue';
 import App from './App.vue';
 import router from './router';
+import store from './store';
 
 // Importa jQuery y asigna a window
 import jQuery from 'jquery';
@@ -19,5 +20,6 @@ window.jQuery = window.$ = jQuery;
 const app = createApp(App);
 
 app.use(router);
+app.use(store);
 
 app.mount('#app');

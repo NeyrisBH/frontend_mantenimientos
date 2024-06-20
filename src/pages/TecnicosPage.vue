@@ -1,6 +1,6 @@
 <template>
     <h1>Tecnicos</h1>
-    <TablaTecnicos />
+    <TablaTecnicos class="container-xxl" />
     <HoverTecnico class="mt-5"/>
 </template>
 
@@ -17,5 +17,7 @@ export default {
 </script>
 
 <style scoped>
-
+.container-xxl {
+    margin: 0 5% 0 5%
+}
 </style>

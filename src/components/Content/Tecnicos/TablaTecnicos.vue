@@ -1,6 +1,6 @@
 <template>
-    <div class="container">
-        <table id="tecnicos" class="display nowrap" style="width:100%">
+    <div class="container-xxl p-5 my-5 border">
+        <table id="tecnicos" class="display nowrap table-hover" style="width:100%">
             <thead>
                 <tr>
                     <th>Identificacion</th>
@@ -20,7 +20,7 @@
                     <td>{{ tecnico.apellidos }}</td>
                     <td>{{ tecnico.telefono }}</td>
                     <td>{{ tecnico.email }}</td>
-                    <td>
+                    <!-- <td>
                         <button class="btn btn-info btn-sm me-2" @click="verRegistro(tecnico)">
                             <i class="fas fa-eye"></i>
                         </button>
@@ -30,25 +30,34 @@
                         <button class="btn btn-danger btn-sm me-2" @click="eliminarRegistro(tecnico)">
                             <i class="fas fa-trash"></i>
                         </button>
+                    </td> -->
+                </tr>
+                <!-- <tr>
+                    <td>Tiger Nixon</td>
+                    <td>System Architect</td>
+                    <td>Edinburgh</td>
+                    <td>61</td>
+                    <td>2011-04-25</td>
+                    <td>$320,800</td>
+                    <td>
+                        <button type="button" class="btn btn-info btn-sm me-2" @click="verRegistro('Tiger Nixon')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn btn-warning btn-sm me-2" @click="editarRegistro('Tiger Nixon')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-danger btn-sm me-2" @click="eliminarRegistro('Tiger Nixon')">
+                            <i class="fas fa-trash"></i>
+                        </button>
                     </td>
-                </tr>
+                </tr> -->
             </tbody>
-            <tfoot>
-                <tr>
-                    <th>Identificacion</th>
-                    <th>Rol</th>
-                    <th>Nombres</th>
-                    <th>Apellidos</th>
-                    <th>Teléfono</th>
-                    <th>Correo</th>
-                    <th>Acciones</th>
-                </tr>
-            </tfoot>
         </table>
     </div>
 </template>
 
 <script>
+
 export default {
     data() {
         return {
@@ -61,7 +70,7 @@ export default {
             email: '',
             horas: null,
             contraseña: '',
-            token: localStorage.getItem('token'),
+            token: this.$store.state.token,
             base_url: 'http://localhost:8080/api/',
         }
     },
@@ -85,6 +94,7 @@ export default {
                 }
                 const data = await response.json();
                 this.tecnicos = data;
+                console.log(this.tecnicos);
             } catch (error) {
                 console.error("Error fetching técnicos:", error);
             }
@@ -101,8 +111,6 @@ export default {
     },
     beforeMount() {
         this.consultaTecnicos();
-    },
-    mounted() {
         window.jQuery('#tecnicos').DataTable({
             responsive: true,
             scrollY: "300px",
@@ -127,6 +135,9 @@ export default {
                 }
             }
         });
+    },
+    mounted() {
+        
     },
     components: {
     },
