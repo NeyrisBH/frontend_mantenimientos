@@ -1,9 +1,9 @@
 <template>
-    <HeaderComponent />
-    <SidebarComponent />
-    <section class="main-container">
-        <RouterView />
-    </section>
+  <HeaderComponent />
+  <SidebarComponent />
+  <section class="main-container">
+    <RouterView />
+  </section>
 </template>
 
 <script>
@@ -20,4 +20,9 @@ export default {
 </script>
 
 <style scoped>
+.main-container {
+  padding: 20px;
+  max-height: 870px;
+  overflow-x: auto;
+}
 </style>

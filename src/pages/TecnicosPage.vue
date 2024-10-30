@@ -18,6 +18,6 @@ export default {
 
 <style scoped>
 .container-xxl {
-    margin: 0 5% 0 5%
+    margin: 0 5% 0 5%;
 }
 </style>
